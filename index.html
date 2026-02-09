@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; media-src 'self' blob:; connect-src 'self'">
+    <meta name="description" content="Learn Indian Classical Music - Pitch Detection, Ragas, Harmonium Practice, Taal Learning">
+    <meta name="keywords" content="Indian Classical Music, Swara, Raga, Taal, Harmonium, Pitch Detection, Music Learning">
+    <title>सरगम शिक्षा | Sargam Shiksha - Learn Indian Classical Music</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🎵</span>
+                <h1>सरगम शिक्षा</h1>
+                <span class="logo-subtitle">Sargam Shiksha</span>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="nav-tab active" data-tab="pitch" role="tab" aria-selected="true" id="tab-pitch">
+                <span class="tab-icon">🎤</span>
+                <span class="tab-label">Pitch Practice</span>
+            </button>
+            <button class="nav-tab" data-tab="harmonium" role="tab" aria-selected="false" id="tab-harmonium">
+                <span class="tab-icon">🎹</span>
+                <span class="tab-label">Harmonium</span>
+            </button>
+            <button class="nav-tab" data-tab="ragas" role="tab" aria-selected="false" id="tab-ragas">
+                <span class="tab-icon">🎶</span>
+                <span class="tab-label">Ragas</span>
+            </button>
+            <button class="nav-tab" data-tab="taals" role="tab" aria-selected="false" id="tab-taals">
+                <span class="tab-icon">🥁</span>
+                <span class="tab-label">Taal</span>
+            </button>
+            <button class="nav-tab" data-tab="ornaments" role="tab" aria-selected="false" id="tab-ornaments">
+                <span class="tab-icon">✨</span>
+                <span class="tab-label">Ornaments</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Pitch Practice Section -->
+            <section id="pitch-section" class="tab-content active" role="tabpanel" aria-labelledby="tab-pitch">
+                <div class="section-header">
+                    <h2>Pitch Practice</h2>
+                    <p>Practice your swara (note) accuracy with real-time feedback</p>
+                </div>
+
+                <!-- Target Note Selector -->
+                <div class="target-note-selector">
+                    <label>Target Swara:</label>
+                    <div class="swara-buttons" id="target-swara-selector">
+                        <button class="swara-btn active" data-swara="Sa">Sa</button>
+                        <button class="swara-btn" data-swara="Re">Re</button>
+                        <button class="swara-btn" data-swara="Ga">Ga</button>
+                        <button class="swara-btn" data-swara="Ma">Ma</button>
+                        <button class="swara-btn" data-swara="Pa">Pa</button>
+                        <button class="swara-btn" data-swara="Dha">Dha</button>
+                        <button class="swara-btn" data-swara="Ni">Ni</button>
+                    </div>
+                </div>
+
+                <!-- Pitch Visualizer -->
+                <div class="pitch-visualizer-container">
+                    <div class="pitch-meter">
+                        <div class="pitch-info">
+                            <span class="current-frequency" id="current-frequency">-- Hz</span>
+                            <span class="current-swara" id="current-swara">--</span>
+                        </div>
+                        <div class="pitch-indicator-container">
+                            <div class="pitch-labels">
+                                <span>Too Low</span>
+                                <span>Correct</span>
+                                <span>Too High</span>
+                            </div>
+                            <div class="pitch-bar">
+                                <div class="pitch-marker" id="pitch-marker"></div>
+                                <div class="pitch-center-zone"></div>
+                            </div>
+                        </div>
+                        <div class="pitch-feedback" id="pitch-feedback">
+                            <span class="feedback-arrow" id="feedback-arrow"></span>
+                            <span class="feedback-text" id="feedback-text">Click Start to begin</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Waveform Canvas -->
+                    <canvas id="waveform-canvas" class="waveform-canvas"></canvas>
+                </div>
+
+                <!-- Controls -->
+                <div class="pitch-controls">
+                    <button class="btn btn-primary btn-large" id="start-pitch-btn">
+                        <span class="btn-icon">🎙️</span>
+                        Start Listening
+                    </button>
+                    <button class="btn btn-secondary" id="play-reference-btn">
+                        <span class="btn-icon">🔊</span>
+                        Play Reference
+                    </button>
+                    <button class="btn btn-secondary" id="record-btn">
+                        <span class="btn-icon">⏺️</span>
+                        Record
+                    </button>
+                </div>
+
+                <!-- Recording Section -->
+                <div class="recording-section hidden" id="recording-section">
+                    <div class="recording-indicator">
+                        <span class="recording-dot"></span>
+                        <span id="recording-time">00:00</span>
+                    </div>
+                    <div class="recording-controls">
+                        <button class="btn btn-danger" id="stop-record-btn">Stop Recording</button>
+                    </div>
+                </div>
+
+                <!-- Playback Section -->
+                <div class="playback-section hidden" id="playback-section">
+                    <h3>Your Recording</h3>
+                    <audio id="playback-audio" controls></audio>
+                    <button class="btn btn-secondary" id="download-recording-btn">
+                        <span class="btn-icon">⬇️</span>
+                        Download WAV
+                    </button>
+                </div>
+            </section>
+
+            <!-- Harmonium Section -->
+            <section id="harmonium-section" class="tab-content" role="tabpanel" aria-labelledby="tab-harmonium">
+                <div class="section-header">
+                    <h2>Harmonium Practice</h2>
+                    <p>Play the harmonium using mouse or keyboard (keys A-L for Sa-Ni)</p>
+                </div>
+
+                <div class="harmonium-settings">
+                    <div class="setting-group">
+                        <label>Base Frequency (Sa):</label>
+                        <input type="range" id="base-frequency" min="200" max="300" value="240" step="1">
+                        <span id="base-frequency-value">240 Hz</span>
+                    </div>
+                    <div class="setting-group">
+                        <label>Octave:</label>
+                        <select id="octave-select">
+                            <option value="mandra">Mandra (Low)</option>
+                            <option value="madhya" selected>Madhya (Middle)</option>
+                            <option value="taar">Taar (High)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="harmonium-container">
+                    <div class="harmonium-keyboard" id="harmonium-keyboard">
+                        <!-- Keys generated by JavaScript -->
+                    </div>
+                    <div class="keyboard-hints">
+                        <p>Keyboard: <kbd>A</kbd> Sa, <kbd>W</kbd> Re♭, <kbd>S</kbd> Re, <kbd>E</kbd> Ga♭, <kbd>D</kbd> Ga, <kbd>F</kbd> Ma, <kbd>T</kbd> Ma♯, <kbd>G</kbd> Pa, <kbd>Y</kbd> Dha♭, <kbd>H</kbd> Dha, <kbd>U</kbd> Ni♭, <kbd>J</kbd> Ni, <kbd>K</kbd> Sa'</p>
+                    </div>
+                </div>
+
+                <div class="current-note-display">
+                    <span class="note-name" id="harmonium-note-name">--</span>
+                    <span class="note-freq" id="harmonium-note-freq">-- Hz</span>
+                </div>
+            </section>
+
+            <!-- Ragas Section -->
+            <section id="ragas-section" class="tab-content" role="tabpanel" aria-labelledby="tab-ragas">
+                <div class="section-header">
+                    <h2>Raga Explorer</h2>
+                    <p>Explore different ragas and their characteristic phrases</p>
+                </div>
+
+                <div class="raga-explorer">
+                    <div class="raga-list" id="raga-list">
+                        <!-- Raga cards generated by JavaScript -->
+                    </div>
+
+                    <div class="raga-detail hidden" id="raga-detail">
+                        <button class="btn btn-back" id="back-to-ragas">← Back to Ragas</button>
+                        <div class="raga-info">
+                            <h3 id="raga-name"></h3>
+                            <div class="raga-meta">
+                                <span class="meta-item"><strong>Thaat:</strong> <span id="raga-thaat"></span></span>
+                                <span class="meta-item"><strong>Time:</strong> <span id="raga-time"></span></span>
+                                <span class="meta-item"><strong>Mood:</strong> <span id="raga-mood"></span></span>
+                            </div>
+                            <div class="raga-notes">
+                                <div class="notes-group">
+                                    <strong>Vadi:</strong> <span id="raga-vadi"></span>
+                                    <strong>Samvadi:</strong> <span id="raga-samvadi"></span>
+                                </div>
+                            </div>
+                            <div class="raga-patterns">
+                                <div class="pattern-group">
+                                    <h4>Aaroh (Ascending)</h4>
+                                    <p id="raga-aaroh" class="pattern-text"></p>
+                                    <button class="btn btn-secondary btn-small play-pattern-btn" data-pattern="aaroh">
+                                        <span class="btn-icon">▶️</span> Play
+                                    </button>
+                                </div>
+                                <div class="pattern-group">
+                                    <h4>Avroh (Descending)</h4>
+                                    <p id="raga-avroh" class="pattern-text"></p>
+                                    <button class="btn btn-secondary btn-small play-pattern-btn" data-pattern="avroh">
+                                        <span class="btn-icon">▶️</span> Play
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="swara-grid" id="swara-grid">
+                                <!-- Swara indicators generated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Taal Section -->
+            <section id="taals-section" class="tab-content" role="tabpanel" aria-labelledby="tab-taals">
+                <div class="section-header">
+                    <h2>Taal Practice</h2>
+                    <p>Learn and practice different taal patterns with visual metronome</p>
+                </div>
+
+                <div class="taal-selector">
+                    <label>Select Taal:</label>
+                    <select id="taal-select">
+                        <option value="teentaal">Teentaal (16 beats)</option>
+                        <option value="ektaal">Ektaal (12 beats)</option>
+                        <option value="jhaptaal">Jhaptaal (10 beats)</option>
+                        <option value="dadra">Dadra (6 beats)</option>
+                        <option value="keherwa">Keherwa (8 beats)</option>
+                        <option value="roopak">Roopak (7 beats)</option>
+                    </select>
+                </div>
+
+                <div class="tempo-control">
+                    <label>Tempo:</label>
+                    <input type="range" id="tempo-slider" min="40" max="200" value="80" step="1">
+                    <span id="tempo-value">80 BPM</span>
+                </div>
+
+                <div class="taal-display" id="taal-display">
+                    <!-- Taal beats generated by JavaScript -->
+                </div>
+
+                <div class="taal-info" id="taal-info">
+                    <div class="info-row">
+                        <span><strong>Current Beat:</strong> <span id="current-beat">-</span></span>
+                        <span><strong>Bol:</strong> <span id="current-bol">-</span></span>
+                    </div>
+                </div>
+
+                <div class="taal-controls">
+                    <button class="btn btn-primary btn-large" id="start-taal-btn">
+                        <span class="btn-icon">▶️</span>
+                        Start
+                    </button>
+                    <button class="btn btn-secondary" id="tap-along-btn">
+                        <span class="btn-icon">👆</span>
+                        Tap Along Mode
+                    </button>
+                </div>
+
+                <div class="taal-legend">
+                    <span class="legend-item"><span class="sam-indicator"></span> Sam (1st beat)</span>
+                    <span class="legend-item"><span class="khali-indicator"></span> Khali (Empty)</span>
+                    <span class="legend-item"><span class="tali-indicator"></span> Tali (Clap)</span>
+                </div>
+            </section>
+
+            <!-- Ornaments Section -->
+            <section id="ornaments-section" class="tab-content" role="tabpanel" aria-labelledby="tab-ornaments">
+                <div class="section-header">
+                    <h2>Ornaments (Alankar)</h2>
+                    <p>Learn meend, khatka, murki and other vocal ornaments</p>
+                </div>
+
+                <div class="ornament-cards">
+                    <div class="ornament-card" data-ornament="meend">
+                        <h3>Meend (मींड)</h3>
+                        <p class="ornament-desc">A smooth glide from one note to another, characteristic of Indian classical music.</p>
+                        <div class="ornament-visual meend-visual">
+                            <canvas id="meend-canvas" width="300" height="100"></canvas>
+                        </div>
+                        <button class="btn btn-secondary play-ornament-btn" data-ornament="meend">
+                            <span class="btn-icon">▶️</span> Listen
+                        </button>
+                    </div>
+
+                    <div class="ornament-card" data-ornament="khatka">
+                        <h3>Khatka (खटका)</h3>
+                        <p class="ornament-desc">Quick grace notes struck rapidly, adding brightness to a note.</p>
+                        <div class="ornament-visual khatka-visual">
+                            <canvas id="khatka-canvas" width="300" height="100"></canvas>
+                        </div>
+                        <button class="btn btn-secondary play-ornament-btn" data-ornament="khatka">
+                            <span class="btn-icon">▶️</span> Listen
+                        </button>
+                    </div>
+
+                    <div class="ornament-card" data-ornament="murki">
+                        <h3>Murki (मुर्की)</h3>
+                        <p class="ornament-desc">A cluster of notes sung rapidly, creating an ornamental phrase.</p>
+                        <div class="ornament-visual murki-visual">
+                            <canvas id="murki-canvas" width="300" height="100"></canvas>
+                        </div>
+                        <button class="btn btn-secondary play-ornament-btn" data-ornament="murki">
+                            <span class="btn-icon">▶️</span> Listen
+                        </button>
+                    </div>
+
+                    <div class="ornament-card" data-ornament="andolan">
+                        <h3>Andolan (आंदोलन)</h3>
+                        <p class="ornament-desc">A slow oscillation around a note, creating a gentle wavering effect.</p>
+                        <div class="ornament-visual andolan-visual">
+                            <canvas id="andolan-canvas" width="300" height="100"></canvas>
+                        </div>
+                        <button class="btn btn-secondary play-ornament-btn" data-ornament="andolan">
+                            <span class="btn-icon">▶️</span> Listen
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ornament-practice hidden" id="ornament-practice">
+                    <h3>Practice Mode</h3>
+                    <p>Try to match the ornament pattern shown above</p>
+                    <canvas id="ornament-practice-canvas" width="600" height="150"></canvas>
+                    <div class="ornament-controls">
+                        <button class="btn btn-primary" id="start-ornament-practice">Start Practice</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🎵 Sargam Shiksha - Learn Indian Classical Music</p>
+            <p class="footer-note">Use headphones for best experience • Works best in Chrome/Firefox</p>
+        </footer>
+
+        <!-- Microphone Permission Modal -->
+        <div class="modal hidden" id="mic-permission-modal">
+            <div class="modal-content">
+                <h3>🎙️ Microphone Access Required</h3>
+                <p>To detect your pitch, we need access to your microphone. Your audio is processed locally and never sent anywhere.</p>
+                <button class="btn btn-primary" id="grant-mic-permission">Allow Microphone</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Howler.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js" integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Application Scripts -->
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/security.js"></script>
+    <script src="js/music/swaras.js"></script>
+    <script src="js/music/ragas.js"></script>
+    <script src="js/music/taals.js"></script>
+    <script src="js/music/ornaments.js"></script>
+    <script src="js/audio/oscillator.js"></script>
+    <script src="js/audio/pitchDetector.js"></script>
+    <script src="js/audio/audioRecorder.js"></script>
+    <script src="js/ui/waveformVisualizer.js"></script>
+    <script src="js/ui/harmoniumKeyboard.js"></script>
+    <script src="js/ui/pitchMeter.js"></script>
+    <script src="js/ui/taalDisplay.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
