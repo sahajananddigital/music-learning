@@ -59,6 +59,10 @@ const HarmoniumKeyboard = (function () {
         container.innerHTML = '';
 
         let whiteKeyIndex = 0;
+        const WHITE_KEY_WIDTH = 60;
+        const WHITE_KEY_MARGIN = 1; // Match CSS margin: 0 1px
+        const TOTAL_WHITE_WIDTH = WHITE_KEY_WIDTH + (WHITE_KEY_MARGIN * 2);
+        const BLACK_KEY_WIDTH = 40;
 
         OCTAVE_KEYS.forEach((keyDef, index) => {
             const key = document.createElement('div');
@@ -75,8 +79,9 @@ const HarmoniumKeyboard = (function () {
 
             // Position black keys
             if (keyDef.isBlack) {
-                // Black keys are positioned relative to white keys
-                const leftOffset = whiteKeyIndex * 64 - 20; // 64px white key + margin, -20 to center
+                // Black keys are positioned relative to the gap between white keys
+                // We center the black key (40px) over the gap
+                const leftOffset = (whiteKeyIndex * TOTAL_WHITE_WIDTH) - (BLACK_KEY_WIDTH / 2);
                 key.style.left = `${leftOffset}px`;
             } else {
                 whiteKeyIndex++;

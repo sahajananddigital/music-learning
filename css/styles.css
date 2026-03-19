@@ -67,6 +67,22 @@
     --transition-normal: 250ms ease;
     --transition-slow: 400ms ease;
     
+    /* Harmonium Theme */
+    --harmonium-wood: #4e2a1e;
+    --harmonium-wood-light: #6d3d2c;
+    --harmonium-wood-dark: #331b14;
+    --harmonium-brass: #d4af37;
+    --harmonium-brass-light: #f1d374;
+    --harmonium-brass-dark: #9b7e1c;
+    --harmonium-brass-glow: rgba(212, 175, 55, 0.4);
+    --harmonium-ivory: #fcf8f0;
+    --harmonium-ebony: #1a1a1a;
+    
+    --harmonium-white-width: 60px;
+    --harmonium-white-height: 200px;
+    --harmonium-black-width: 40px;
+    --harmonium-black-height: 130px;
+
     /* Typography */
     --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-size-xs: 0.75rem;
@@ -346,6 +362,32 @@ body::before {
     margin-bottom: var(--spacing-xl);
 }
 
+.scale-selector-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--bg-hover);
+    margin-bottom: var(--spacing-md);
+}
+
+.scale-select {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--accent-primary);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    cursor: pointer;
+    outline: none;
+}
+
+.scale-select:focus {
+    box-shadow: 0 0 5px var(--accent-glow);
+}
+
 .target-note-selector label {
     font-size: var(--font-size-lg);
     color: var(--text-secondary);
@@ -582,6 +624,11 @@ body::before {
     gap: var(--spacing-xl);
     flex-wrap: wrap;
     margin-bottom: var(--spacing-xl);
+    background: var(--bg-card);
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--harmonium-wood-dark);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
 }
 
 .setting-group {
@@ -591,38 +638,76 @@ body::before {
 }
 
 .setting-group label {
-    color: var(--text-secondary);
+    color: var(--harmonium-brass-light);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
 }
 
 .setting-group input[type="range"] {
     width: 150px;
-    accent-color: var(--accent-primary);
+    accent-color: var(--harmonium-brass);
 }
 
 .setting-group select {
     padding: var(--spacing-sm) var(--spacing-md);
     background: var(--bg-tertiary);
-    border: 1px solid var(--bg-hover);
+    border: 1px solid var(--harmonium-wood-dark);
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-family: var(--font-family);
+    outline: none;
+}
+
+.setting-group select:focus {
+    border-color: var(--harmonium-brass);
+}
+
+.setting-group span {
+    color: var(--text-secondary);
+    font-family: monospace;
+    min-width: 60px;
 }
 
 .harmonium-container {
-    background: var(--bg-card);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-xl);
+    background: linear-gradient(135deg, var(--harmonium-wood) 0%, var(--harmonium-wood-dark) 100%);
+    border: 8px solid var(--harmonium-wood-dark);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl) var(--spacing-md);
     margin-bottom: var(--spacing-xl);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 
+        inset 0 0 30px rgba(0,0,0,0.8),
+        0 10px 30px rgba(0,0,0,0.6);
     overflow-x: auto;
+    position: relative;
+}
+
+/* Bellows pattern background */
+.harmonium-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 15px;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--harmonium-wood-dark) 0px,
+        var(--harmonium-wood-dark) 20px,
+        var(--harmonium-wood-light) 20px,
+        var(--harmonium-wood-light) 40px
+    );
+    opacity: 0.5;
+    border-bottom: 2px solid var(--harmonium-brass);
 }
 
 .harmonium-keyboard {
     display: flex;
     justify-content: center;
-    min-height: 200px;
+    min-height: 220px;
     position: relative;
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-xl) 0;
+    margin: 0 auto;
+    width: fit-content;
 }
 
 .harmonium-key {
@@ -635,44 +720,61 @@ body::before {
     cursor: pointer;
     transition: all var(--transition-fast);
     user-select: none;
+    box-shadow: 0 4px 5px rgba(0,0,0,0.4);
 }
 
 .harmonium-key.white {
-    width: 60px;
-    height: 180px;
-    background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
-    border: 1px solid #bbb;
-    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    width: var(--harmonium-white-width);
+    height: var(--harmonium-white-height);
+    background: linear-gradient(180deg, 
+        #ffffff 0%, 
+        var(--harmonium-ivory) 80%, 
+        #e0d7c5 100%);
+    border: 1px solid #c0b7a5;
+    border-radius: 0 0 5px 5px;
     z-index: 1;
-    margin: 0 2px;
+    margin: 0 1px;
 }
 
 .harmonium-key.white:hover {
-    background: linear-gradient(180deg, #fff 0%, #f0f0f0 100%);
+    background: linear-gradient(180deg, #fff 0%, var(--harmonium-ivory) 100%);
 }
 
 .harmonium-key.white.active {
-    background: linear-gradient(180deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
-    transform: translateY(3px);
+    background: linear-gradient(180deg, 
+        var(--accent-secondary) 0%, 
+        var(--accent-primary) 100%);
+    transform: translateY(4px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.6), 0 0 15px var(--accent-glow);
+    border-color: var(--accent-primary);
 }
 
 .harmonium-key.black {
-    width: 40px;
-    height: 120px;
-    background: linear-gradient(180deg, #333 0%, #111 100%);
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    width: var(--harmonium-black-width);
+    height: var(--harmonium-black-height);
+    background: linear-gradient(180deg, 
+        #444 0%, 
+        var(--harmonium-ebony) 20%, 
+        #000 100%);
+    border-radius: 0 0 4px 4px;
     position: absolute;
     z-index: 2;
-    margin-left: -20px;
+    border: 1px solid #333;
+    /* Margin-left will be set by JS or calculated */
+    box-shadow: 2px 5px 8px rgba(0,0,0,0.7);
 }
 
 .harmonium-key.black:hover {
-    background: linear-gradient(180deg, #444 0%, #222 100%);
+    background: linear-gradient(180deg, #555 0%, #222 100%);
 }
 
 .harmonium-key.black.active {
-    background: linear-gradient(180deg, var(--accent-primary) 0%, #cc7a00 100%);
-    transform: translateY(2px);
+    background: linear-gradient(180deg, 
+        var(--accent-primary) 0%, 
+        var(--harmonium-wood-dark) 100%);
+    transform: translateY(3px);
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.8), 0 0 10px var(--accent-glow);
+    border-color: var(--accent-primary);
 }
 
 .key-label {
@@ -680,14 +782,20 @@ body::before {
     font-weight: 600;
     text-align: center;
     pointer-events: none;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+}
+
+.harmonium-key:hover .key-label {
+    opacity: 1;
 }
 
 .harmonium-key.white .key-label {
-    color: #333;
+    color: #5d4037;
 }
 
 .harmonium-key.black .key-label {
-    color: #fff;
+    color: var(--harmonium-brass-light);
     margin-bottom: var(--spacing-xs);
 }
 
@@ -696,12 +804,17 @@ body::before {
     margin-top: var(--spacing-lg);
     color: var(--text-muted);
     font-size: var(--font-size-sm);
+    padding: var(--spacing-md);
+    background: rgba(0,0,0,0.3);
+    border-radius: var(--radius-md);
 }
 
 .keyboard-hints kbd {
     display: inline-block;
-    padding: 2px 6px;
-    background: var(--bg-tertiary);
+    padding: 2px 8px;
+    background: var(--harmonium-wood-dark);
+    color: var(--harmonium-brass-light);
+    border: 1px solid var(--harmonium-brass-dark);
     border-radius: var(--radius-sm);
     font-family: monospace;
     margin: 0 2px;
@@ -711,24 +824,45 @@ body::before {
     display: flex;
     justify-content: center;
     gap: var(--spacing-xl);
-    padding: var(--spacing-lg);
-    background: var(--bg-card);
-    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    background: linear-gradient(180deg, #333 0%, #111 100%);
+    border: 4px solid var(--harmonium-brass-dark);
+    border-radius: var(--radius-lg);
+    position: relative;
+    max-width: 300px;
+    margin: 0 auto;
+    box-shadow: 
+        inset 0 0 15px rgba(0,0,0,1),
+        0 5px 15px rgba(0,0,0,0.5);
+}
+
+.current-note-display::before {
+    content: 'CURRENT SWARA';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--harmonium-brass-dark);
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
 }
 
 .note-name {
     font-size: var(--font-size-3xl);
     font-weight: 700;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--harmonium-brass-light);
+    text-shadow: 0 0 10px var(--harmonium-brass-glow);
 }
 
 .note-freq {
     font-size: var(--font-size-xl);
     color: var(--text-secondary);
     align-self: center;
+    font-family: monospace;
 }
 
 /* ===================================

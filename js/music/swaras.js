@@ -8,6 +8,23 @@ const SwaraModule = (function() {
 
     // Base frequency for Sa (can be configured)
     let baseFrequency = 240;
+    let currentScale = 'Manual';
+
+    // Western scales mapping to frequencies (Middle Octave)
+    const SCALES = {
+        'C': 261.63,
+        'C#': 277.18,
+        'D': 293.66,
+        'D#': 311.13,
+        'E': 329.63,
+        'F': 349.23,
+        'F#': 369.99,
+        'G': 392.00,
+        'G#': 415.30,
+        'A': 440.00,
+        'A#': 466.16,
+        'B': 493.88
+    };
 
     // Frequency ratios for swaras (Just Intonation)
     const SWARA_RATIOS = {
@@ -103,6 +120,7 @@ const SwaraModule = (function() {
      */
     function setBaseFrequency(freq) {
         baseFrequency = freq;
+        currentScale = 'Manual';
     }
 
     /**
@@ -111,6 +129,35 @@ const SwaraModule = (function() {
      */
     function getBaseFrequency() {
         return baseFrequency;
+    }
+
+    /**
+     * Set scale by Western note name
+     * @param {string} scaleName - Western note (e.g., 'C#')
+     */
+    function setScale(scaleName) {
+        if (SCALES[scaleName]) {
+            baseFrequency = SCALES[scaleName];
+            currentScale = scaleName;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get current scale name
+     * @returns {string} Scale name or 'Manual'
+     */
+    function getScale() {
+        return currentScale;
+    }
+
+    /**
+     * Get all available scales
+     * @returns {Object}
+     */
+    function getScales() {
+        return SCALES;
     }
 
     /**
@@ -227,6 +274,9 @@ const SwaraModule = (function() {
     return {
         setBaseFrequency,
         getBaseFrequency,
+        setScale,
+        getScale,
+        getScales,
         getFrequency,
         getAllFrequencies,
         detectSwara,

@@ -62,6 +62,24 @@
 
                 <!-- Target Note Selector -->
                 <div class="target-note-selector">
+                    <div class="scale-selector-group">
+                        <label for="pitch-scale-select">Scale (Sa):</label>
+                        <select id="pitch-scale-select" class="scale-select">
+                            <option value="Manual">Manual</option>
+                            <option value="C">C (Safed 1)</option>
+                            <option value="C#" selected>C# (Kali 1)</option>
+                            <option value="D">D (Safed 2)</option>
+                            <option value="D#">D# (Kali 2)</option>
+                            <option value="E">E (Safed 3)</option>
+                            <option value="F">F (Safed 4)</option>
+                            <option value="F#">F# (Kali 3)</option>
+                            <option value="G">G (Safed 5)</option>
+                            <option value="G#">G# (Kali 4)</option>
+                            <option value="A">A (Safed 6)</option>
+                            <option value="A#">A# (Kali 5)</option>
+                            <option value="B">B (Safed 7)</option>
+                        </select>
+                    </div>
                     <label>Target Swara:</label>
                     <div class="swara-buttons" id="target-swara-selector">
                         <button class="swara-btn active" data-swara="Sa">Sa</button>
@@ -149,9 +167,27 @@
 
                 <div class="harmonium-settings">
                     <div class="setting-group">
-                        <label>Base Frequency (Sa):</label>
-                        <input type="range" id="base-frequency" min="200" max="300" value="240" step="1">
-                        <span id="base-frequency-value">240 Hz</span>
+                        <label for="harmonium-scale-select">Scale (Sa):</label>
+                        <select id="harmonium-scale-select" class="scale-select">
+                            <option value="Manual">Manual</option>
+                            <option value="C">C (Safed 1)</option>
+                            <option value="C#" selected>C# (Kali 1)</option>
+                            <option value="D">D (Safed 2)</option>
+                            <option value="D#">D# (Kali 2)</option>
+                            <option value="E">E (Safed 3)</option>
+                            <option value="F">F (Safed 4)</option>
+                            <option value="F#">F# (Kali 3)</option>
+                            <option value="G">G (Safed 5)</option>
+                            <option value="G#">G# (Kali 4)</option>
+                            <option value="A">A (Safed 6)</option>
+                            <option value="A#">A# (Kali 5)</option>
+                            <option value="B">B (Safed 7)</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label>Base Frequency:</label>
+                        <input type="range" id="base-frequency" min="200" max="500" value="277" step="1">
+                        <span id="base-frequency-value">277 Hz</span>
                     </div>
                     <div class="setting-group">
                         <label>Octave:</label>

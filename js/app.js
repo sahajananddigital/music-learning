@@ -13,13 +13,17 @@
         isListening: false,
         isRecording: false,
         currentRaga: null,
-        tempo: 80
+        tempo: 80,
+        currentScale: 'C#'
     };
 
     /**
      * Initialize the application
      */
     function init() {
+        // Set initial scale
+        SwaraModule.setScale(AppState.currentScale);
+
         // Check browser support
         const support = Helpers.checkBrowserSupport();
         if (!support.allSupported()) {
@@ -114,6 +118,13 @@
         // Initialize pitch meter
         PitchMeter.init({});
 
+        // Scale selector
+        const pitchScaleSelect = document.getElementById('pitch-scale-select');
+        pitchScaleSelect.value = AppState.currentScale;
+        pitchScaleSelect.addEventListener('change', () => {
+            updateGlobalScale(pitchScaleSelect.value);
+        });
+
         // Swara selector buttons
         const swaraButtons = document.querySelectorAll('#target-swara-selector .swara-btn');
         swaraButtons.forEach(btn => {
@@ -157,6 +168,29 @@
             micModal.classList.add('hidden');
             await startPitchDetection();
         });
+    }
+
+    /**
+     * Update global scale state and sync across sections
+     */
+    function updateGlobalScale(scaleName) {
+        if (scaleName === 'Manual') return;
+
+        AppState.currentScale = scaleName;
+        SwaraModule.setScale(scaleName);
+
+        // Sync selectors
+        document.getElementById('pitch-scale-select').value = scaleName;
+        document.getElementById('harmonium-scale-select').value = scaleName;
+
+        // Sync harmonium slider
+        const freq = Math.round(SwaraModule.getBaseFrequency());
+        const slider = document.getElementById('base-frequency');
+        const value = document.getElementById('base-frequency-value');
+        if (slider && value) {
+            slider.value = freq;
+            value.textContent = `${freq} Hz`;
+        }
     }
 
     /**
@@ -304,14 +338,31 @@
     function initHarmoniumSection() {
         HarmoniumKeyboard.init('harmonium-keyboard');
 
+        // Scale selector
+        const harmoniumScaleSelect = document.getElementById('harmonium-scale-select');
+        harmoniumScaleSelect.value = AppState.currentScale;
+        harmoniumScaleSelect.addEventListener('change', () => {
+            updateGlobalScale(harmoniumScaleSelect.value);
+        });
+
         // Base frequency slider
         const baseFreqSlider = document.getElementById('base-frequency');
         const baseFreqValue = document.getElementById('base-frequency-value');
+
+        // Set initial frequency based on scale
+        const initialFreq = Math.round(SwaraModule.getBaseFrequency());
+        baseFreqSlider.value = initialFreq;
+        baseFreqValue.textContent = `${initialFreq} Hz`;
 
         baseFreqSlider.addEventListener('input', () => {
             const freq = parseInt(baseFreqSlider.value);
             baseFreqValue.textContent = `${freq} Hz`;
             SwaraModule.setBaseFrequency(freq);
+            
+            // Sync with scale select
+            harmoniumScaleSelect.value = 'Manual';
+            document.getElementById('pitch-scale-select').value = 'Manual';
+            AppState.currentScale = 'Manual';
         });
 
         // Octave selector
